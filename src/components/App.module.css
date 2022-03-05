@@ -1,0 +1,9 @@
+.section {
+  background-color: rgb(148, 210, 212);
+}
+
+.title {
+  font-size: 24px;
+  font-weight: 700;
+  text-align: center;
+}
