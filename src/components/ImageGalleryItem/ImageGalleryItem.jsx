@@ -6,10 +6,9 @@ export default class ImageGalleryItem extends Component {
 
   render() {
     const { img } = this.props;
-
     return (
       <li className={s.ImageGalleryItem}>
-        <img src={img.webformatURL} alt="img" className={s.image} />
+        <img src={img.webformatURL} alt={img.tags} className={s.image} />
       </li>
     );
   }

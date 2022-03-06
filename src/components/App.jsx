@@ -25,7 +25,6 @@ export default class App extends React.Component {
     const url = `${BASE_URL}?${meta}`;
     const fetchImg = await fetch(url);
     const r = await fetchImg.json();
-    console.log(r);
 
     click ? this.renderImg(r.hits) : this.renderMoreImg(r.hits);
   };
@@ -60,9 +59,9 @@ export default class App extends React.Component {
     });
   };
 
-  // componentDidMount() {
-  //   this.fetchImg();
-  // }
+  componentDidMount() {
+    this.fetchImg();
+  }
 
   componentDidUpdate(prevProps, prevState) {
     // console.log('App componentDidUpdate');

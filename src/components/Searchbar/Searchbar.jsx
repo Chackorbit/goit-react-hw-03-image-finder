@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import s from './Searchbar.module.css';
+import { FcSearch } from 'react-icons/fc';
 
 export default class Searchbar extends Component {
   state = { searchQuery: '' };
@@ -20,7 +21,8 @@ export default class Searchbar extends Component {
       <header className={s.searchbar}>
         <form className={s.SearchForm} onSubmit={this.formSubmit}>
           <button type="submit" className={s.SearchForm_button}>
-            <span className={s.button_label}>Search</span>
+            <span className={s.button_label}></span>
+            <FcSearch />
           </button>
 
           <input
