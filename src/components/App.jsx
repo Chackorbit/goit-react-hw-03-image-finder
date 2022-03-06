@@ -1,6 +1,8 @@
 import React from 'react';
 import Searchbar from './Searchbar/Searchbar';
-// import s from './App.module.css';
+import ImageGallery from './ImageGallery/ImageGallery';
+import Button from './Button/Button';
+import s from './App.module.css';
 
 export default class App extends React.Component {
   state = {
@@ -9,7 +11,7 @@ export default class App extends React.Component {
     arrImg: [],
   };
 
-  fetchImg = async () => {
+  fetchImg = async click => {
     const BASE_URL = 'https://pixabay.com/api/';
 
     const meta = new URLSearchParams({
@@ -24,14 +26,19 @@ export default class App extends React.Component {
     const fetchImg = await fetch(url);
     const r = await fetchImg.json();
     console.log(r);
-    this.renderImg(r.hits);
+
+    click ? this.renderImg(r.hits) : this.renderMoreImg(r.hits);
   };
 
   renderImg = arrImg => {
+    this.setState(() => ({
+      arrImg: [...arrImg],
+    }));
+  };
+  renderMoreImg = arrImg => {
     this.setState(prevState => ({
       arrImg: [...prevState.arrImg, ...arrImg],
     }));
-    console.log(this.state.arrImg);
   };
 
   setSearchQuery = inputQuery => {
@@ -41,23 +48,41 @@ export default class App extends React.Component {
     });
   };
 
-  componentDidMount() {
-    this.fetchImg();
-  }
+  loadMore = () => {
+    this.setState(prevState => ({
+      pages: prevState.pages + 1,
+    }));
+  };
+
+  reset = () => {
+    this.setState({
+      arrImg: [],
+    });
+  };
+
+  // componentDidMount() {
+  //   this.fetchImg();
+  // }
 
   componentDidUpdate(prevProps, prevState) {
-    console.log('App componentDidUpdate');
+    // console.log('App componentDidUpdate');
 
     if (this.state.searchQuery !== prevState.searchQuery) {
       console.log('Обновили Слово');
-      this.fetchImg();
+      this.reset();
+      this.fetchImg(true);
+    } else if (prevState.pages !== this.state.pages) {
+      console.log('Кликнули по кнопке');
+      this.fetchImg(false);
     }
   }
 
   render() {
     return (
-      <div>
+      <div className={s.App}>
         <Searchbar setSearchQuery={this.setSearchQuery} />
+        <ImageGallery arrImg={this.state.arrImg} />
+        {this.state.arrImg.length > 0 && <Button loadMore={this.loadMore} />}
       </div>
     );
   }
