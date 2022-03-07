@@ -7,6 +7,7 @@ export default class Modal extends Component {
   };
 
   //   toggleModal = () => {
+  // console.log("🚀 ~ toggleModal", toggleModal)
   //     this.setState(({ showModal }) => ({
   //       showModal: !showModal,
   //     }));
@@ -24,5 +25,3 @@ export default class Modal extends Component {
     );
   }
 }
-
-const two = 2;
