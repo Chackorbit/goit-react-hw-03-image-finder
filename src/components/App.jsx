@@ -1,15 +1,22 @@
 import React from 'react';
-import Searchbar from './Searchbar/Searchbar';
-import ImageGallery from './ImageGallery/ImageGallery';
-import Button from './Button/Button';
+// import Modal from './Modal/Modal';
 import s from './App.module.css';
+import Button from './Button/Button';
+import ImageGallery from './ImageGallery/ImageGallery';
+import Searchbar from './Searchbar/Searchbar';
 
 export default class App extends React.Component {
   state = {
     pages: 1,
     searchQuery: '',
     arrImg: [],
+    showModal: true,
   };
+  // toggleModal = () => {
+  //   this.setState(({ showModal }) => ({
+  //     showModal: !showModal,
+  //   }));
+  // };
 
   fetchImg = async click => {
     const BASE_URL = 'https://pixabay.com/api/';
@@ -77,9 +84,12 @@ export default class App extends React.Component {
   }
 
   render() {
+    const { showModal } = this.state;
+    console.log(showModal);
     return (
       <div className={s.App}>
         <Searchbar setSearchQuery={this.setSearchQuery} />
+
         <ImageGallery arrImg={this.state.arrImg} />
         {this.state.arrImg.length > 0 && <Button loadMore={this.loadMore} />}
       </div>
