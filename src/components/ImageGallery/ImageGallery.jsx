@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import ImageGalleryItem from 'components/ImageGalleryItem/ImageGalleryItem';
 import s from './ImageGallery.module.css';
-import Modal from 'components/Modal/Modal';
+// import Modal from 'components/Modal/Modal';
 
 export default class ImageGallery extends Component {
   state = {};
@@ -10,8 +10,13 @@ export default class ImageGallery extends Component {
     return (
       <ul className={s.ImageGallery}>
         {this.props.arrImg.map(img => {
-          <Modal key={img.id} img={img} />;
-          return <ImageGalleryItem key={img.id} img={img} />;
+          return (
+            <ImageGalleryItem
+              key={img.id}
+              img={img}
+              showModal={this.props.showModal}
+            />
+          );
         })}
       </ul>
     );

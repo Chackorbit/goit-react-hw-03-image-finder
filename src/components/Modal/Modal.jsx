@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import s from './Modal.module.css';
 
 export default class Modal extends Component {
-  state = {
-    showModal: true,
-  };
+  // state = {
+  //   showModal: true,
+  // };
 
   //   toggleModal = () => {
   // console.log("🚀 ~ toggleModal", toggleModal)
@@ -14,13 +14,9 @@ export default class Modal extends Component {
   //   };
 
   render() {
-    const { img } = this.props;
-
     return (
-      <div class={s.overlay}>
-        <div class={s.modal}>
-          <img src={img.largeImageURL} alt={img.tags} />
-        </div>
+      <div className={s.overlay}>
+        <div className={s.modal}>{this.props.children}</div>
       </div>
     );
   }

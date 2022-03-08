@@ -3,6 +3,8 @@ import React from 'react';
 import s from './App.module.css';
 import Button from './Button/Button';
 import ImageGallery from './ImageGallery/ImageGallery';
+import Modal from './Modal/Modal';
+// import Modal from './Modal/Modal';
 import Searchbar from './Searchbar/Searchbar';
 
 export default class App extends React.Component {
@@ -10,7 +12,7 @@ export default class App extends React.Component {
     pages: 1,
     searchQuery: '',
     arrImg: [],
-    showModal: true,
+    showModal: false,
   };
   // toggleModal = () => {
   //   this.setState(({ showModal }) => ({
@@ -85,12 +87,18 @@ export default class App extends React.Component {
 
   render() {
     const { showModal } = this.state;
-    console.log(showModal);
+    console.log('🚀 ~ showModal', showModal);
+
     return (
       <div className={s.App}>
         <Searchbar setSearchQuery={this.setSearchQuery} />
 
-        <ImageGallery arrImg={this.state.arrImg} />
+        <ImageGallery
+          arrImg={this.state.arrImg}
+          // showModal={this.state.showModal}
+        />
+
+        {showModal && <Modal showModal={this.state.showModal} />}
         {this.state.arrImg.length > 0 && <Button loadMore={this.loadMore} />}
       </div>
     );
