@@ -3,6 +3,7 @@ import React from 'react';
 import s from './App.module.css';
 import Button from './Button/Button';
 import ImageGallery from './ImageGallery/ImageGallery';
+// import ImageGalleryItem from './ImageGalleryItem/ImageGalleryItem';
 import Modal from './Modal/Modal';
 // import Modal from './Modal/Modal';
 import Searchbar from './Searchbar/Searchbar';
@@ -14,11 +15,13 @@ export default class App extends React.Component {
     arrImg: [],
     showModal: false,
   };
-  // toggleModal = () => {
-  //   this.setState(({ showModal }) => ({
-  //     showModal: !showModal,
-  //   }));
-  // };
+  toggleModal = e => {
+    if (e.target.id) {
+      this.setState(({ showModal }) => ({
+        showModal: !showModal,
+      }));
+    }
+  };
 
   fetchImg = async click => {
     const BASE_URL = 'https://pixabay.com/api/';
@@ -87,18 +90,60 @@ export default class App extends React.Component {
 
   render() {
     const { showModal } = this.state;
-    console.log('🚀 ~ showModal', showModal);
+    // console.log(this.state.arrImg);
 
     return (
-      <div className={s.App}>
+      <div className={s.App} onClick={this.toggleModal}>
         <Searchbar setSearchQuery={this.setSearchQuery} />
-
         <ImageGallery
           arrImg={this.state.arrImg}
-          // showModal={this.state.showModal}
+          toggleModal={this.toggleModal}
+          showModal={this.state.showModal}
         />
+        {/* onClose={this.toggleModal} */}
+        {showModal && (
+          <Modal>
+            {this.state.arrImg.map(img => {
+              console.log(img.id === 7047830);
+              return (
+                <img
+                  id={img.id}
+                  src={img.largeImageURL}
+                  alt={img.tags}
+                  className={s.image}
+                />
+              );
+            })}
+            {}
+            {/* {this.state.arrImg.find(img => {
+              console.log(img.id);
+              if (img.id === 7047830) {
+                return (
+                  <img
+                    id={img.id}
+                    src={img.largeImageURL}
+                    alt={img.tags}
+                    className={s.image}
+                  />
+                );
+              }
+            })} */}
+            {/* {this.state.arrImg.map(img => {
+              console.log(img.id);
 
-        {showModal && <Modal showModal={this.state.showModal} />}
+              if (img.id) {
+                return (
+                  <img
+                    id={img.id}
+                    src={img.largeImageURL}
+                    alt={img.tags}
+                    className={s.image}
+                  />
+                );
+              }
+            })} */}
+          </Modal>
+        )}
         {this.state.arrImg.length > 0 && <Button loadMore={this.loadMore} />}
       </div>
     );
