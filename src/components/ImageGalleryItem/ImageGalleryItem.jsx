@@ -1,5 +1,3 @@
-// import App from 'components/App';
-// import Modal from 'components/Modal/Modal';
 import React, { Component } from 'react';
 import s from './ImageGalleryItem.module.css';
 
@@ -14,6 +12,7 @@ export default class ImageGalleryItem extends Component {
 
   render() {
     const { img } = this.props;
+    // const largeImageURL = img.largeImageURL;
 
     return (
       <li className={s.ImageGalleryItem} onClick={this.clickImg}>

@@ -16,7 +16,6 @@ export default class Modal extends Component {
     window.removeEventListener('keydown', this.handleKeydown);
   }
   handleKeydown = e => {
-    console.log(e.code);
     if (e.code === 'Escape') {
       console.log('ККликнул по Ескейпу');
       this.props.onClose();
@@ -28,7 +27,7 @@ export default class Modal extends Component {
       <div className={s.overlay}>
         <div className={s.modal}>
           {this.props.children}
-          {/* <img src={this.props.img.largeImageURL} alt="" /> */}
+          {/* <img src={this.props.largeImageURL} alt="" /> */}
         </div>
       </div>,
       modalRoot
