@@ -1,10 +1,8 @@
 import React from 'react';
-// import Modal from './Modal/Modal';
 import s from './App.module.css';
 import Button from './Button/Button';
 import ImageGallery from './ImageGallery/ImageGallery';
 import Modal from './Modal/Modal';
-// import Modal from './Modal/Modal';
 import Searchbar from './Searchbar/Searchbar';
 
 export default class App extends React.Component {
@@ -13,11 +11,21 @@ export default class App extends React.Component {
     searchQuery: '',
     arrImg: [],
     showModal: false,
+    modalImage: '',
   };
+
+  openModal = largeImageURL => {
+    this.setState({
+      showModal: true,
+      modalImage: largeImageURL,
+    });
+  };
+
   toggleModal = () => {
-    this.setState(({ showModal }) => ({
-      showModal: !showModal,
-    }));
+    this.setState({
+      showModal: false,
+      modalImage: '',
+    });
   };
 
   fetchImg = async click => {
@@ -43,10 +51,15 @@ export default class App extends React.Component {
       arrImg: [...arrImg],
     }));
   };
+
   renderMoreImg = arrImg => {
     this.setState(prevState => ({
       arrImg: [...prevState.arrImg, ...arrImg],
     }));
+    window.scrollTo({
+      top: document.documentElement.scrollHeight,
+      behavior: 'smooth',
+    });
   };
 
   setSearchQuery = inputQuery => {
@@ -69,12 +82,10 @@ export default class App extends React.Component {
   };
 
   componentDidMount() {
-    this.fetchImg();
+    this.fetchImg(true);
   }
 
   componentDidUpdate(prevProps, prevState) {
-    // console.log('App componentDidUpdate');
-
     if (this.state.searchQuery !== prevState.searchQuery) {
       console.log('Обновили Слово');
       this.reset();
@@ -85,30 +96,18 @@ export default class App extends React.Component {
     }
   }
 
-  // onModal = (img, largeImageURL) => {
-  //   console.log(largeImageURL);
-  //   console.log(img);
-  //   return <ModalItem largeImageURL={largeImageURL} />;
-  //   // return (
-  //   //   <li className={s.ImageGalleryItem} onClick={this.clickImg}>
-  //   //     <img
-  //   //       id={img.id}
-  //   //       src={largeImageURL}
-  //   //       alt={img.tags}
-  //   //       // onClick={() => onModal(img.largeImageURL)} //img.largeImageURL
-  //   //       className={s.image}
-  //   //     />
-  //   //   </li>
-  //   // );
-  // };
   render() {
     const { showModal } = this.state;
 
     return (
-      <div className={s.App} onClick={this.toggleModal}>
+      <div className={s.App}>
         <Searchbar setSearchQuery={this.setSearchQuery} />
-        <ImageGallery arrImg={this.state.arrImg} />
-        {showModal && <Modal onClose={this.toggleModal}></Modal>}
+        <ImageGallery arrImg={this.state.arrImg} openModal={this.openModal} />
+        {showModal && (
+          <Modal onClose={this.toggleModal}>
+            <img src={this.state.modalImage} alt="" />
+          </Modal>
+        )}
         {this.state.arrImg.length > 0 && <Button loadMore={this.loadMore} />}
       </div>
     );

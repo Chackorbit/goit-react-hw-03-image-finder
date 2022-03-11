@@ -1,24 +1,24 @@
-import React, { Component } from 'react';
+import React from 'react';
 import ImageGalleryItem from 'components/ImageGalleryItem/ImageGalleryItem';
 import s from './ImageGallery.module.css';
-// import Modal from 'components/Modal/Modal';
 
-export default class ImageGallery extends Component {
-  state = {};
+const ImageGallery = ({ arrImg, openModal }) => {
+  return (
+    <ul className={s.ImageGallery}>
+      {arrImg.map(({ id, tags, webformatURL, largeImageURL }) => {
+        return (
+          <ImageGalleryItem
+            key={id}
+            id={id}
+            tags={tags}
+            webformatURL={webformatURL}
+            largeImageURL={largeImageURL}
+            openModal={openModal}
+          />
+        );
+      })}
+    </ul>
+  );
+};
 
-  render() {
-    return (
-      <ul className={s.ImageGallery}>
-        {this.props.arrImg.map(img => {
-          return (
-            <ImageGalleryItem
-              key={img.id}
-              img={img}
-              showModal={this.props.showModal}
-            />
-          );
-        })}
-      </ul>
-    );
-  }
-}
+export default ImageGallery;

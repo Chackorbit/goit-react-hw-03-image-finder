@@ -1,28 +1,24 @@
-import React, { Component } from 'react';
+import React from 'react';
 import s from './ImageGalleryItem.module.css';
 
-export default class ImageGalleryItem extends Component {
-  state = {};
+const ImageGalleryItem = ({
+  id,
+  tags,
+  webformatURL,
+  largeImageURL,
+  openModal,
+}) => {
+  return (
+    <li className={s.ImageGalleryItem}>
+      <img
+        id={id}
+        src={webformatURL}
+        alt={tags}
+        className={s.image}
+        onClick={() => openModal(largeImageURL)}
+      />
+    </li>
+  );
+};
 
-  // clickImg = e => {
-  //   if (e.target.id == this.props.img.id) {
-  //     return true;
-  //   }
-  // };
-
-  render() {
-    const { img } = this.props;
-    // const largeImageURL = img.largeImageURL;
-
-    return (
-      <li className={s.ImageGalleryItem} onClick={this.clickImg}>
-        <img
-          id={img.id}
-          src={img.webformatURL}
-          alt={img.tags}
-          className={s.image}
-        />
-      </li>
-    );
-  }
-}
+export default ImageGalleryItem;
