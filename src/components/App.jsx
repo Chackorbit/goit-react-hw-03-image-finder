@@ -5,6 +5,8 @@ import ImageGallery from './ImageGallery/ImageGallery';
 import Modal from './Modal/Modal';
 import Searchbar from './Searchbar/Searchbar';
 
+import Loader from './Loader/Loader';
+
 export default class App extends React.Component {
   state = {
     pages: 1,
@@ -12,6 +14,8 @@ export default class App extends React.Component {
     arrImg: [],
     showModal: false,
     modalImage: '',
+    loader: false,
+    btnAction: '',
   };
 
   openModal = largeImageURL => {
@@ -31,6 +35,8 @@ export default class App extends React.Component {
   fetchImg = async click => {
     const BASE_URL = 'https://pixabay.com/api/';
 
+    this.onLoader(true);
+
     const meta = new URLSearchParams({
       key: '25149934-751328f61e2da43ec1e4df823',
       q: this.state.searchQuery,
@@ -39,11 +45,29 @@ export default class App extends React.Component {
       page: this.state.pages,
       per_page: 12,
     });
+
+    this.activBtn('disable');
+
     const url = `${BASE_URL}?${meta}`;
     const fetchImg = await fetch(url);
     const r = await fetchImg.json();
+    this.onLoader(false);
+
+    this.activBtn('');
 
     click ? this.renderImg(r.hits) : this.renderMoreImg(r.hits);
+  };
+
+  onLoader = spiner => {
+    this.setState({
+      loader: spiner,
+    });
+  };
+
+  activBtn = activ => {
+    this.setState({
+      btnAction: activ,
+    });
   };
 
   renderImg = arrImg => {
@@ -87,28 +111,31 @@ export default class App extends React.Component {
 
   componentDidUpdate(prevProps, prevState) {
     if (this.state.searchQuery !== prevState.searchQuery) {
-      console.log('Обновили Слово');
       this.reset();
       this.fetchImg(true);
     } else if (prevState.pages !== this.state.pages) {
-      console.log('Кликнули по кнопке');
       this.fetchImg(false);
     }
   }
 
   render() {
-    const { showModal } = this.state;
+    const { showModal, btnAction } = this.state;
 
     return (
       <div className={s.App}>
         <Searchbar setSearchQuery={this.setSearchQuery} />
+
+        {this.state.loader && <Loader />}
+
         <ImageGallery arrImg={this.state.arrImg} openModal={this.openModal} />
         {showModal && (
           <Modal onClose={this.toggleModal}>
             <img src={this.state.modalImage} alt="" />
           </Modal>
         )}
-        {this.state.arrImg.length > 0 && <Button loadMore={this.loadMore} />}
+        {this.state.arrImg.length >= 12 && (
+          <Button loadMore={this.loadMore} btnAction={btnAction} />
+        )}
       </div>
     );
   }

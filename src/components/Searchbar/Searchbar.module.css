@@ -45,7 +45,7 @@
 .SearchForm_button:hover {
   opacity: 1;
 }
-svg {
+.SearchForm_button svg {
   width: 2em;
   height: 2em;
 }
