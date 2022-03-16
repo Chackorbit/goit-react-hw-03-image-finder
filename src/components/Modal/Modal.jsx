@@ -7,12 +7,12 @@ export default class Modal extends Component {
   state = {};
 
   componentDidMount() {
-    console.log('componentDidMount');
+    // console.log('componentDidMount');
     window.addEventListener('keydown', this.handleKeydown);
   }
 
   componentWillUnmount() {
-    console.log('componentWillUnmount');
+    // console.log('componentWillUnmount');
     window.removeEventListener('keydown', this.handleKeydown);
   }
   handleKeydown = e => {

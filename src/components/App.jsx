@@ -12,6 +12,7 @@ export default class App extends React.Component {
     pages: 1,
     searchQuery: '',
     arrImg: [],
+    allImg: 0,
     showModal: false,
     modalImage: '',
     loader: false,
@@ -51,8 +52,10 @@ export default class App extends React.Component {
     const url = `${BASE_URL}?${meta}`;
     const fetchImg = await fetch(url);
     const r = await fetchImg.json();
-    this.onLoader(false);
+    console.log(r);
 
+    this.saveAllImg(r.totalHits);
+    this.onLoader(false);
     this.activBtn('');
 
     click ? this.renderImg(r.hits) : this.renderMoreImg(r.hits);
@@ -67,6 +70,12 @@ export default class App extends React.Component {
   activBtn = activ => {
     this.setState({
       btnAction: activ,
+    });
+  };
+
+  saveAllImg = allImg => {
+    this.setState({
+      allImg: allImg,
     });
   };
 
@@ -120,10 +129,10 @@ export default class App extends React.Component {
 
   render() {
     const { showModal, btnAction } = this.state;
-
+    console.log(this.state.arrImg.length);
     return (
       <div className={s.App}>
-        <Searchbar setSearchQuery={this.setSearchQuery} />
+        <Searchbar setSearchQuery={this.setSearchQuery} reset={this.reset} />
 
         {this.state.loader && <Loader />}
 
@@ -133,7 +142,9 @@ export default class App extends React.Component {
             <img src={this.state.modalImage} alt="" />
           </Modal>
         )}
-        {this.state.arrImg.length >= 12 && (
+        {this.state.arrImg.length === this.state.allImg ? (
+          <p></p>
+        ) : (
           <Button loadMore={this.loadMore} btnAction={btnAction} />
         )}
       </div>
