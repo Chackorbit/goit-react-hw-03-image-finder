@@ -5,18 +5,16 @@ import ImageGallery from './ImageGallery/ImageGallery';
 import Modal from './Modal/Modal';
 import Searchbar from './Searchbar/Searchbar';
 
-import Loader from './Loader/Loader';
+// import Loader from './Loader/Loader';
 
 export default class App extends React.Component {
   state = {
     pages: 1,
     searchQuery: '',
     arrImg: [],
-    allImg: 0,
     showModal: false,
     modalImage: '',
-    loader: false,
-    btnAction: '',
+    stopRenderBtn: 0,
   };
 
   openModal = largeImageURL => {
@@ -36,8 +34,6 @@ export default class App extends React.Component {
   fetchImg = async click => {
     const BASE_URL = 'https://pixabay.com/api/';
 
-    this.onLoader(true);
-
     const meta = new URLSearchParams({
       key: '25149934-751328f61e2da43ec1e4df823',
       q: this.state.searchQuery,
@@ -46,49 +42,22 @@ export default class App extends React.Component {
       page: this.state.pages,
       per_page: 12,
     });
-
-    this.activBtn('disable');
-
     const url = `${BASE_URL}?${meta}`;
+
     const fetchImg = await fetch(url);
     const r = await fetchImg.json();
-    console.log(r);
+    console.log(r.hits.length);
 
-    this.saveAllImg(r.totalHits);
-    this.onLoader(false);
-    this.activBtn('');
-
-    click ? this.renderImg(r.hits) : this.renderMoreImg(r.hits);
-  };
-
-  onLoader = spiner => {
-    this.setState({
-      loader: spiner,
-    });
-  };
-
-  activBtn = activ => {
-    this.setState({
-      btnAction: activ,
-    });
-  };
-
-  saveAllImg = allImg => {
-    this.setState({
-      allImg: allImg,
-    });
-  };
-
-  renderImg = arrImg => {
-    this.setState(() => ({
-      arrImg: [...arrImg],
-    }));
+    this.renderMoreImg(r.hits);
   };
 
   renderMoreImg = arrImg => {
     this.setState(prevState => ({
       arrImg: [...prevState.arrImg, ...arrImg],
+      pages: prevState.pages + 1,
+      stopRenderBtn: arrImg.length,
     }));
+
     window.scrollTo({
       top: document.documentElement.scrollHeight,
       behavior: 'smooth',
@@ -99,42 +68,26 @@ export default class App extends React.Component {
     this.setState({
       searchQuery: inputQuery,
       pages: 1,
-    });
-  };
-
-  loadMore = () => {
-    this.setState(prevState => ({
-      pages: prevState.pages + 1,
-    }));
-  };
-
-  reset = () => {
-    this.setState({
       arrImg: [],
     });
   };
 
   componentDidMount() {
-    this.fetchImg(true);
+    if (!this.state.searchQuery) return;
   }
 
   componentDidUpdate(prevProps, prevState) {
     if (this.state.searchQuery !== prevState.searchQuery) {
-      this.reset();
-      this.fetchImg(true);
-    } else if (prevState.pages !== this.state.pages) {
-      this.fetchImg(false);
+      this.fetchImg();
     }
   }
 
   render() {
-    const { showModal, btnAction } = this.state;
-    console.log(this.state.arrImg.length);
+    const { showModal, stopRenderBtn } = this.state;
+
     return (
       <div className={s.App}>
-        <Searchbar setSearchQuery={this.setSearchQuery} reset={this.reset} />
-
-        {this.state.loader && <Loader />}
+        <Searchbar setSearchQuery={this.setSearchQuery} />
 
         <ImageGallery arrImg={this.state.arrImg} openModal={this.openModal} />
         {showModal && (
@@ -142,11 +95,7 @@ export default class App extends React.Component {
             <img src={this.state.modalImage} alt="" />
           </Modal>
         )}
-        {this.state.arrImg.length === this.state.allImg ? (
-          <p></p>
-        ) : (
-          <Button loadMore={this.loadMore} btnAction={btnAction} />
-        )}
+        {stopRenderBtn >= 12 && <Button loadMore={this.fetchImg} />}
       </div>
     );
   }

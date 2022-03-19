@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import s from './Modal.module.css';
 import { createPortal } from 'react-dom';
+import Loader from 'components/Loader/Loader';
 
 const modalRoot = document.querySelector('#modal-root');
 export default class Modal extends Component {
@@ -31,6 +32,7 @@ export default class Modal extends Component {
   render() {
     return createPortal(
       <div className={s.overlay} onClick={this.handleOverlayClick}>
+        <Loader />
         <div className={s.modal}>{this.props.children}</div>
       </div>,
       modalRoot

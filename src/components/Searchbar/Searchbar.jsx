@@ -13,7 +13,6 @@ export default class Searchbar extends Component {
 
   formSubmit = e => {
     e.preventDefault();
-    this.props.reset();
     this.props.setSearchQuery(this.state.searchQuery);
   };
 
