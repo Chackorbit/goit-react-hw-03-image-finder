@@ -46,7 +46,6 @@ export default class App extends React.Component {
 
     const fetchImg = await fetch(url);
     const r = await fetchImg.json();
-    console.log(r.hits.length);
 
     this.renderMoreImg(r.hits);
   };
